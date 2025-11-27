@@ -38,7 +38,6 @@ interface UseWebRTCReturn {
 export function useWebRTC({
   socket,
   localStream,
-  roomId,
   currentUserId,
 }: UseWebRTCOptions): UseWebRTCReturn {
   const [remoteParticipants, setRemoteParticipants] = useState<
@@ -128,7 +127,7 @@ export function useWebRTC({
         await peerConnection.setLocalDescription(answer);
 
         socket.emit("answer", {
-          answer: answer.toJSON(),
+          answer,
           targetSocketId: senderSocketId,
           senderSocketId: currentUserId,
         });
@@ -210,7 +209,7 @@ export function useWebRTC({
         await peerConnection.setLocalDescription(offer);
 
         socket.emit("offer", {
-          offer: offer.toJSON(),
+          offer,
           targetSocketId: socketId,
           senderSocketId: currentUserId,
         });

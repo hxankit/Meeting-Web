@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
-import { getSocket, closeSocket } from "../services/socketService";
+import { getSocket } from "../services/socketService";
 
 export function useSocket(): Socket | null {
   const [socket, setSocket] = useState<Socket | null>(null);
