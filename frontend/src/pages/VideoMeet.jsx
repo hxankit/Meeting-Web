@@ -458,17 +458,24 @@ export default function VideoMeetComponent() {
 
   const getPermissions = async () => {
     try {
-      const videoPermission = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoPermission) { setVideoAvailable(true); } else { setVideoAvailable(false); }
-      const audioPermission = await navigator.mediaDevices.getUserMedia({ audio: true });
-      if (audioPermission) { setAudioAvailable(true); } else { setAudioAvailable(false); }
-      if (navigator.mediaDevices.getDisplayMedia) { setScreenAvailable(true); } else { setScreenAvailable(false); }
-      if (videoAvailable || audioAvailable) {
-        const userMediaStream = await navigator.mediaDevices.getUserMedia({ video: videoAvailable, audio: audioAvailable });
-        if (userMediaStream) {
-          window.localStream = userMediaStream;
-          if (localVideoref.current) { localVideoref.current.srcObject = userMediaStream; }
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const videoPermission = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (videoPermission) { setVideoAvailable(true); } else { setVideoAvailable(false); }
+        const audioPermission = await navigator.mediaDevices.getUserMedia({ audio: true });
+        if (audioPermission) { setAudioAvailable(true); } else { setAudioAvailable(false); }
+        if (navigator.mediaDevices.getDisplayMedia) { setScreenAvailable(true); } else { setScreenAvailable(false); }
+        if (videoAvailable || audioAvailable) {
+          const userMediaStream = await navigator.mediaDevices.getUserMedia({ video: videoAvailable, audio: audioAvailable });
+          if (userMediaStream) {
+            window.localStream = userMediaStream;
+            if (localVideoref.current) { localVideoref.current.srcObject = userMediaStream; }
+          }
         }
+      } else {
+        setVideoAvailable(false);
+        setAudioAvailable(false);
+        setScreenAvailable(false);
+        console.error("getUserMedia is not supported in this browser.");
       }
     } catch (error) { console.log(error); }
   };
@@ -515,8 +522,12 @@ export default function VideoMeetComponent() {
 
   let getUserMedia = () => {
     if ((video && videoAvailable) || (audio && audioAvailable)) {
-      navigator.mediaDevices.getUserMedia({ video: video, audio: audio })
-        .then(getUserMediaSuccess).then(() => {}).catch((e) => console.log(e))
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: video, audio: audio })
+          .then(getUserMediaSuccess).then(() => {}).catch((e) => console.log(e))
+      } else {
+        console.error("getUserMedia is not supported in this browser.");
+      }
     } else {
       try { let tracks = localVideoref.current.srcObject.getTracks(); tracks.forEach(track => track.stop()) } catch (e) {}
     }
