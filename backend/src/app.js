@@ -31,7 +31,7 @@ app.use(express.urlencoded({ limit: "40kb", extended: true }));
 const frontendBuildPath = path.join(__dirname, "../../frontend/build");
 app.use(express.static(frontendBuildPath));
 
-app.use("/api/v1/users", userRoutes);
+app.use("/v1/users", userRoutes);
 
 // Fallback to index.html for SPA (only for non-API, non-static requests)
 app.get("*", (req, res) => {

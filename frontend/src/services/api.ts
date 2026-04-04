@@ -19,7 +19,7 @@ export interface RoomInfoResponse {
  * Create a new meeting room
  */
 export async function createRoom(): Promise<CreateRoomResponse> {
-  const response = await fetch(`${config.apiBaseUrl}/api/rooms`, {
+  const response = await fetch(`${config.apiBaseUrl}/v1/rooms`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export async function createRoom(): Promise<CreateRoomResponse> {
  * Get room information by room ID
  */
 export async function getRoomInfo(roomId: string): Promise<RoomInfoResponse> {
-  const response = await fetch(`${config.apiBaseUrl}/api/rooms/${roomId}`);
+  const response = await fetch(`${config.apiBaseUrl}/v1/rooms/${roomId}`);
 
   if (!response.ok) {
     if (response.status === 404) {
