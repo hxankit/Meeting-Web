@@ -57,7 +57,7 @@ Create a `.env` file in the `backend/` directory. See `.env.example` for require
 
 MIT License
 
-Copyright (c) 2026 apnacollege
+Copyright (c) 2026 Expanzia.in
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

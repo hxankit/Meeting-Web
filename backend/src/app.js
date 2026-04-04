@@ -33,8 +33,11 @@ app.use(express.static(frontendBuildPath));
 
 app.use("/api/v1/users", userRoutes);
 
-// Fallback to index.html for SPA
+// Fallback to index.html for SPA (only for non-API, non-static requests)
 app.get("*", (req, res) => {
+    if (req.originalUrl.startsWith("/api/")) {
+        return res.status(404).json({ error: "API route not found" });
+    }
     res.sendFile(path.join(frontendBuildPath, "index.html"));
 });
 
